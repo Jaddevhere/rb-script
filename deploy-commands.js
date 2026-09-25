@@ -1,6 +1,9 @@
 const { REST, Routes, SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const config = require('./config.json');
 
+// قراءة التوكن من Environment Variables أو من config.json
+const token = process.env.TOKEN || config.token;
+
 const commands = [
   new SlashCommandBuilder()
     .setName('help')
@@ -76,7 +79,7 @@ const commands = [
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
 ].map(command => command.toJSON());
 
-const rest = new REST({ version: '10' }).setToken(config.token);
+const rest = new REST({ version: '10' }).setToken(token);
 
 (async () => {
   try {
