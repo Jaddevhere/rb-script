@@ -11,8 +11,7 @@ const fs = require('fs');
 const http = require('http');
 const config = require('./config.json');
 
-// --- خدعة منصة Render (HTTP Server) ---
-// ينشئ سيرفر ويب مصغر يستقبل طلبات المنافذ حتى تجعل Render يعتبر البوت Web Service مجاني شغال 24/7
+// --- خادم Render Keep-Alive ---
 const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
@@ -370,4 +369,5 @@ client.on('interactionCreate', async interaction => {
   }
 });
 
-client.login(config.token);
+// تسجيل الدخول باستخدام التوكن المتاح
+client.login(process.env.TOKEN || config.token);
