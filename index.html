@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TRL HUB v2.0 - Key System System</title>
+    <title>TRL HUB v2.0 - Key System</title>
 
     <!-- Google Fonts & FontAwesome Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
@@ -12,13 +12,13 @@
     <style>
         :root {
             --bg-color: #0d0f17;
-            --card-bg: rgba(22, 27, 46, 0.75);
+            --card-bg: rgba(22, 27, 46, 0.8);
             --primary: #00f3ff;
             --secondary: #8b5cf6;
             --text: #f3f4f6;
             --text-dim: #9ca3af;
             --success: #10b981;
-            --border: rgba(0, 243, 255, 0.2);
+            --border: rgba(0, 243, 255, 0.25);
         }
 
         * {
@@ -40,13 +40,13 @@
             overflow-x: hidden;
         }
 
-        /* Glowing background decorative circles */
+        /* Glowing Background Circles */
         .bg-glow {
             position: absolute;
-            width: 350px;
-            height: 350px;
+            width: 380px;
+            height: 380px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            filter: blur(140px);
+            filter: blur(150px);
             border-radius: 50%;
             z-index: 0;
             opacity: 0.35;
@@ -58,11 +58,11 @@
             width: 100%;
             max-width: 520px;
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--border);
             border-radius: 24px;
             padding: 35px 25px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             text-align: center;
             animation: fadeIn 0.8s ease-in-out;
         }
@@ -74,10 +74,10 @@
 
         .badge {
             display: inline-block;
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 243, 255, 0.12);
             color: var(--primary);
             border: 1px solid var(--primary);
-            padding: 6px 16px;
+            padding: 6px 18px;
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 700;
@@ -86,9 +86,9 @@
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 900;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             background: linear-gradient(90deg, #ffffff, var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -98,94 +98,65 @@
             color: var(--text-dim);
             font-size: 0.95rem;
             margin-bottom: 25px;
+            line-height: 1.6;
         }
 
-        /* Step Boxes */
-        .step-box {
+        /* Feature Highlight Card */
+        .info-card {
             background: rgba(13, 15, 23, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
+            padding: 16px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
             text-align: right;
         }
 
-        .step-box.active {
-            border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 243, 255, 0.15);
+        .info-card i {
+            font-size: 1.8rem;
+            color: var(--primary);
         }
 
-        .step-box.disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        .step-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .step-number {
-            width: 30px;
-            height: 30px;
-            background: var(--primary);
-            color: #000;
-            font-weight: 900;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-
-        .step-title {
-            font-size: 1.05rem;
-            font-weight: 700;
-        }
-
-        /* Captcha Card */
-        .captcha-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+        /* Admin Code Input Toggle Section */
+        .admin-section {
+            margin-bottom: 20px;
             background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px;
             border-radius: 12px;
-            cursor: pointer;
-            transition: 0.2s;
         }
 
-        .captcha-container:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        .checkbox-custom {
-            width: 24px;
-            height: 24px;
-            border: 2px solid var(--primary);
-            border-radius: 6px;
+        .admin-input-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.3s;
+            gap: 8px;
+            margin-top: 8px;
         }
 
-        .checkbox-custom.checked {
-            background: var(--primary);
-            color: #000;
+        .admin-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            text-align: center;
+        }
+
+        .admin-input:focus {
+            border-color: var(--secondary);
         }
 
         /* Buttons */
         .btn {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             border: none;
-            border-radius: 12px;
-            font-size: 1rem;
+            border-radius: 14px;
+            font-size: 1.05rem;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -194,29 +165,65 @@
             gap: 10px;
             transition: all 0.3s ease;
             text-decoration: none;
-            margin-top: 10px;
         }
 
-        .btn-yt {
-            background: #ff0000;
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
-        }
-
-        .btn-yt:hover {
-            background: #cc0000;
-            transform: translateY(-2px);
-        }
-
-        .btn-verify {
+        .btn-main {
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             color: #fff;
-            box-shadow: 0 4px 15px rgba(0, 243, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 243, 255, 0.35);
         }
 
-        .btn-verify:hover {
-            opacity: 0.9;
+        .btn-main:hover {
             transform: translateY(-2px);
+            opacity: 0.95;
+            box-shadow: 0 6px 25px rgba(0, 243, 255, 0.5);
+        }
+
+        .btn-admin {
+            width: auto;
+            padding: 10px 16px;
+            background: var(--secondary);
+            color: #fff;
+            font-size: 0.85rem;
+            border-radius: 8px;
+        }
+
+        /* Loading Bar Section (10 Seconds) */
+        .loading-container {
+            display: none;
+            background: rgba(13, 15, 23, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .loading-text {
+            font-size: 0.95rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px var(--primary);
         }
 
         /* Key Result Box */
@@ -224,23 +231,24 @@
             display: none;
             background: rgba(0, 243, 255, 0.05);
             border: 2px dashed var(--primary);
-            padding: 18px;
-            border-radius: 16px;
+            padding: 20px;
+            border-radius: 18px;
             margin-top: 20px;
             animation: fadeIn 0.5s ease;
         }
 
         .key-display {
             font-family: monospace;
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             font-weight: 900;
             color: var(--primary);
-            background: rgba(0, 0, 0, 0.4);
-            padding: 12px;
-            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 14px;
+            border-radius: 10px;
             word-break: break-all;
-            margin: 12px 0;
+            margin: 15px 0;
             letter-spacing: 1.5px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
         }
 
         .footer-credits {
@@ -260,57 +268,58 @@
     <div class="bg-glow"></div>
 
     <div class="container">
-        <div class="badge">OFFICIAL KEY SYSTEM</div>
+        <div class="badge">🔥 المكان الأفضل والأسرع للسكربتات</div>
         <h1>TRL HUB v2.0</h1>
-        <p class="subtitle">قم بإكمال الخطوات البسيطة التالية للحصول على مفتاح التفعيل الفريد الخاص بك.</p>
+        <p class="subtitle">أفضل منصة للحصول على سكربتات روبلوكس المجانية بدون إعلانات مزعجة وبأعلى أداء.</p>
 
-        <!-- Step 1: Human Check -->
-        <div class="step-box active" id="step1">
-            <div class="step-header">
-                <div class="step-number">1</div>
-                <div class="step-title">التحقق البشري</div>
-            </div>
-            <div class="captcha-container" onclick="passHumanCheck()">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="checkbox-custom" id="captchaBox"></div>
-                    <span style="font-size: 0.95rem;">أنا لست برنامج روبوت (أنا إنسان)</span>
-                </div>
-                <i class="fa-solid fa-user-shield" style="color: var(--primary); font-size: 1.3rem;"></i>
+        <!-- Feature Card -->
+        <div class="info-card">
+            <i class="fa-solid fa-bolt"></i>
+            <div>
+                <div style="font-weight: 700; font-size: 0.95rem;">توليد آمن ومباشر للمفتاح</div>
+                <div style="font-size: 0.8rem; color: var(--text-dim);">احصل على مفتاحك الخاص خلال 10 ثوانٍ فقط واستمتع بكافة الميزات!</div>
             </div>
         </div>
 
-        <!-- Step 2: YouTube Task -->
-        <div class="step-box disabled" id="step2">
-            <div class="step-header">
-                <div class="step-number">2</div>
-                <div class="step-title">مهمة اليوتيوب الرسمية</div>
+        <!-- Admin Access Option -->
+        <div class="admin-section">
+            <div style="font-size: 0.82rem; color: var(--text-dim); text-align: right;">
+                <i class="fa-solid fa-shield-halved" style="color: var(--secondary);"></i> هل لديك كود الأدمن؟ (تجاوز الانتظار):
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-dim); margin-bottom: 12px;">
-                اضغط على الزر أدناه للاشتراك بالقناة ووضع لايك على آخر فيديو لفك قفل المفتاح:
-            </p>
-
-            <!-- ضع رابط قناتك أو فيديو اليوتيوب هنا -->
-            <a href="https://www.youtube.com/@Jaddevhere" target="_blank" class="btn btn-yt" onclick="markYtDone()">
-                <i class="fa-brands fa-youtube"></i> الاشتراك ولايك على آخر فيديو
-            </a>
-
-            <button class="btn btn-verify" id="btnGetKey" style="display: none;" onclick="generateKey()">
-                <i class="fa-solid fa-key"></i> توليد وإظهار المفتاح
-            </button>
+            <div class="admin-input-group">
+                <input type="text" id="adminCodeInput" class="admin-input" placeholder="أدخل كود الأدمن هنا...">
+                <button class="btn btn-admin" onclick="checkAdminCode()">تفعيل</button>
+            </div>
         </div>
 
-        <!-- Step 3: Key Result -->
+        <!-- Start Button -->
+        <button class="btn btn-main" id="startBtn" onclick="startLoading()">
+            <i class="fa-solid fa-key"></i> احصل على المفتاح الآن
+        </button>
+
+        <!-- Loading Section (10 Seconds) -->
+        <div class="loading-container" id="loadingContainer">
+            <div class="loading-text">
+                <span>جاري تشفير وتجهيز المفتاح...</span>
+                <span id="timerText">10s</span>
+            </div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- Key Display Box -->
         <div class="key-box" id="keyBox">
             <div style="color: var(--success); font-weight: 700; font-size: 1.1rem;">
                 <i class="fa-solid fa-circle-check"></i> تم استخراج المفتاح بنجاح!
             </div>
             <div class="key-display" id="keyText">TRL-XXXX-XXXX-XXXX</div>
             
-            <button class="btn btn-verify" onclick="copyKey()">
+            <button class="btn btn-main" onclick="copyKey()">
                 <i class="fa-regular fa-copy"></i> <span id="copyBtnText">نسخ المفتاح</span>
             </button>
             <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 10px;">
-                💡 هذا المفتاح خاص بك وفريد تماماً ولا يمكن تكراره، صالح لمدة 24 ساعة.
+                💡 هذا المفتاح خاص بك وفريد 100% ولا يمكن تكراره، صالح لمدة 24 ساعة.
             </p>
         </div>
 
@@ -320,61 +329,72 @@
     </div>
 
     <script>
-        let isHuman = false;
-        let isYtVisited = false;
+        // كود الأدمن الافتراضي لتجاوز الانتظار فوراً
+        const ADMIN_SECRET_CODE = "TAIM2026"; 
 
-        // الخطوة الأولى: التحقق البشري
-        function passHumanCheck() {
-            if (isHuman) return;
-            
-            const box = document.getElementById('captchaBox');
-            box.classList.add('checked');
-            box.innerHTML = '<i class="fa-solid fa-check"></i>';
-            isHuman = true;
+        // بدء أنيميشن التحميل لمدة 10 ثوانٍ
+        function startLoading() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.querySelector('.admin-section').style.display = 'none';
+            document.getElementById('loadingContainer').style.display = 'block';
 
-            // تفعيل الخطوة الثانية
-            document.getElementById('step1').classList.remove('active');
-            document.getElementById('step2').classList.remove('disabled');
-            document.getElementById('step2').classList.add('active');
+            let secondsLeft = 10;
+            const timerText = document.getElementById('timerText');
+            const progressFill = document.getElementById('progressFill');
+
+            const interval = setInterval(() => {
+                secondsLeft -= 0.1;
+                const percentage = ((10 - secondsLeft) / 10) * 100;
+
+                progressFill.style.width = `${percentage}%`;
+                timerText.innerText = `${Math.ceil(secondsLeft)}s`;
+
+                if (secondsLeft <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('loadingContainer').style.display = 'none';
+                    generateUniqueKey(false);
+                }
+            }, 100);
         }
 
-        // الخطوة الثانية: الضغط على رابط اليوتيوب
-        function markYtDone() {
-            if (!isHuman) return;
-            isYtVisited = true;
-
-            // إظهار زر التوليد بعد فتح اليوتيوب
-            setTimeout(() => {
-                document.getElementById('btnGetKey').style.display = 'flex';
-            }, 1000);
+        // التحقق من كود الأدمن
+        function checkAdminCode() {
+            const inputVal = document.getElementById('adminCodeInput').value.trim();
+            if (inputVal === ADMIN_SECRET_CODE || inputVal.toUpperCase() === "TRL-ADMIN") {
+                alert("تم التجميع بكود الأدمن! تم تجاوز الانتظار بنجاح.");
+                document.getElementById('startBtn').style.display = 'none';
+                document.querySelector('.admin-section').style.display = 'none';
+                generateUniqueKey(true);
+            } else {
+                alert("كود الأدمن غير صحيح!");
+            }
         }
 
-        // خوارزمية توليد مفتاح مستحيل يتكرر في الحياة (Crypto-based Unique Generator)
-        function generateKey() {
-            if (!isHuman || !isYtVisited) return;
+        // خوارزمية توليد مفتاح فريد مستحيل يتكرر في الحياة
+        function generateUniqueKey(isAdmin) {
+            if (isAdmin) {
+                document.getElementById('keyText').innerText = "TRL-ADMIN-VIP-2026";
+            } else {
+                // 1. استخدام الوقت بالمايكروثانية بنظام Base36
+                const timestampPart = Date.now().toString(36).toUpperCase();
 
-            // 1. استخدام الوقت الحالي بالمايكروثانية وتغليفه بنظام 36
-            const timestampPart = Date.now().toString(36).toUpperCase();
+                // 2. استخدام القيم العشوائية المشفرة من النظام
+                const cryptoArray = new Uint32Array(2);
+                window.crypto.getRandomValues(cryptoArray);
+                
+                const randPart1 = cryptoArray[0].toString(36).toUpperCase().padStart(6, '0').substring(0, 4);
+                const randPart2 = cryptoArray[1].toString(36).toUpperCase().padStart(6, '0').substring(0, 4);
+                
+                // 3. تركيب المفتاح النهائي الفريد
+                const uniqueKey = `TRL-${timestampPart}-${randPart1}-${randPart2}-2026`;
+                document.getElementById('keyText').innerText = uniqueKey;
+            }
 
-            // 2. استخدام القيم العشوائية المشفرة من الأجهزة (High Entropy Crypto)
-            const cryptoArray = new Uint32Array(2);
-            window.crypto.getRandomValues(cryptoArray);
-            
-            const randPart1 = cryptoArray[0].toString(36).toUpperCase().padStart(6, '0').substring(0, 4);
-            const randPart2 = cryptoArray[1].toString(36).toUpperCase().padStart(6, '0').substring(0, 4);
-            
-            // 3. تركيب المفتاح النهائي الفريد
-            const uniqueKey = `TRL-${timestampPart}-${randPart1}-${randPart2}-2026`;
-
-            // عرض المفتاح
-            document.getElementById('keyText').innerText = uniqueKey;
             document.getElementById('keyBox').style.display = 'block';
-            
-            // التمرير السلس للمفتاح
             document.getElementById('keyBox').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // وظيفة نسخ المفتاح
+        // نسخ المفتاح للحافظة
         function copyKey() {
             const keyText = document.getElementById('keyText').innerText;
             navigator.clipboard.writeText(keyText).then(() => {
