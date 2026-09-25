@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RB Script - نظام الكود</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f0f15; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: #181824; border: 1px solid #2a2a3d; border-radius: 12px; padding: 25px; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        h2 { color: #00aaff; margin-bottom: 5px; }
+        p { color: #aaa; font-size: 14px; margin-bottom: 20px; }
+        .task-box { background: #202030; border: 1px solid #33334d; border-radius: 8px; padding: 15px; margin-bottom: 12px; text-align: right; display: flex; justify-content: space-between; align-items: center; }
+        .btn { background: #00aaff; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; }
+        .btn:disabled { background: #444; cursor: not-allowed; }
+        .checkbox-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .status-box { background: #12121a; border-radius: 8px; padding: 10px; margin: 15px 0; font-size: 14px; color: #00ff88; }
+        .key-box { display: none; background: #00aaff15; border: 2px dashed #00aaff; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .key-text { font-family: monospace; font-size: 22px; font-weight: bold; letter-spacing: 2px; color: #00aaff; margin: 10px 0; }
+        .timer-text { font-size: 12px; color: #ffaa00; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>RB Script Key System</h2>
+    <p>أكمل المهمتين للحصول على كود التفعيل الخاص بك</p>
+
+    <div class="task-box">
+        <div>
+            <strong>1. شاهد القناة</strong>
+            <div id="yt-status" class="timer-text">اضغط شاهد لبدء العداد (10ث)</div>
+        </div>
+        <a id="yt-btn" href="https://youtube.com/@trl_team_rl?si=RgCZL2Q4J6UyvaR1" target="_blank" class="btn" onclick="startYoutubeTask()">شاهد</a>
+    </div>
+
+    <div class="task-box">
+        <label class="checkbox-container">
+            <input type="checkbox" id="human-check" disabled onclick="checkTasks()">
+            <strong>2. أثبت أنك إنسان</strong>
+        </label>
+    </div>
+
+    <div class="status-box" id="status-text">المهام المكتملة: 0 / 2</div>
+
+    <button id="get-key-btn" class="btn" style="width: 100%; padding: 12px;" disabled onclick="generateKey()">استلام الكود</button>
+
+    <div class="key-box" id="key-box">
+        <div>الكود الخاص بك جاهز:</div>
+        <div class="key-text" id="generated-key">--------</div>
+        <div class="timer-text">⚠️ هذا الكود صالح لمدة 24 ساعة فقط ومستحيل تكراره!</div>
+        <button class="btn" style="margin-top: 10px; background: #222;" onclick="copyKey()">نسخ الكود</button>
+    </div>
+</div>
+
+<script>
+    let ytDone = false;
+    let humanDone = false;
+    const SECRET_SALT = "TRL_SECRET_KEY_2026";
+
+    function startYoutubeTask() {
+        let count = 10;
+        const status = document.getElementById("yt-status");
+        status.innerText = "انتظر 10 ثوانٍ...";
+        
+        const interval = setInterval(() => {
+            count--;
+            status.innerText = "انتظر " + count + " ثوانٍ...";
+            if (count <= 0) {
+                clearInterval(interval);
+                status.innerText = "✅ تمت المهمة بنجاح!";
+                status.style.color = "#00ff88";
+                ytDone = true;
+                document.getElementById("human-check").disabled = false;
+                updateStatus();
+            }
+        }, 1000);
+    }
+
+    function checkTasks() {
+        humanDone = document.getElementById("human-check").checked;
+        updateStatus();
+    }
+
+    function updateStatus() {
+        let completed = (ytDone ? 1 : 0) + (humanDone ? 1 : 0);
+        document.getElementById("status-text").innerText = "المهام المكتملة: " + completed + " / 2";
+        if (completed === 2) {
+            document.getElementById("get-key-btn").disabled = false;
+        }
+    }
+
+    function generateKey() {
+        const btn = document.getElementById("get-key-btn");
+        btn.disabled = true;
+        btn.innerText = "انتظر 5 ثوانٍ جاري توليد الكود...";
+
+        setTimeout(() => {
+            btn.style.display = "none";
+            
+            // توليد كود فريد من 9 أحرف وأرقام مبني على الوقت الحالي لضمان الصلاحية 24 ساعة وعدم التكرار
+            const nowHours = Math.floor(Date.now() / (1000 * 60 * 60));
+            const randomSeed = Math.floor(Math.random() * 899999) + 100000;
+            const raw = nowHours + "_" + randomSeed + "_" + SECRET_SALT;
+            
+            // تحويل إلى كود من 9 أحرف وأرقام
+            let hash = 0;
+            for (let i = 0; i < raw.length; i++) {
+                hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+                hash |= 0;
+            }
+            
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let key = "";
+            let num = Math.abs(hash) + nowHours;
+            
+            for (let i = 0; i < 9; i++) {
+                key += chars[(num + i * randomSeed) % chars.length];
+            }
+
+            document.getElementById("generated-key").innerText = key;
+            document.getElementById("key-box").style.display = "block";
+        }, 5000);
+    }
+
+    function copyKey() {
+        const keyText = document.getElementById("generated-key").innerText;
+        navigator.clipboard.writeText(keyText);
+        alert("تم نسخ الكود بنجاح!");
+    }
+</script>
+
+</body>
+</html>
