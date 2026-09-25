@@ -11,7 +11,6 @@ local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 
 local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
 
 -- Safe Parent GUI for Mobile Executors
 local ParentGui = (gethui and gethui()) or (syn and syn.protect_gui and syn.protect_gui(ScreenGui)) or CoreGui or LocalPlayer:WaitForChild("PlayerGui")
@@ -31,7 +30,6 @@ ScreenGui.Parent = ParentGui
 -- Global Variables
 local NoclipEnabled = false
 local InfJumpEnabled = false
-local FlyEnabled = false
 local PlayerESPEnabled = false
 local KeyVerified = false
 
@@ -442,7 +440,7 @@ local function CreateTab(name, iconText)
         Container = TabContainer
     }
     table.insert(Tabs, tabObj)
-    return tabContainer
+    return TabContainer
 end
 
 -- Function to add Toggles with Description
@@ -829,19 +827,35 @@ end)
 
 
 -- =================================================================
--- 6. FLOW LOGIC & INTERACTION
+-- 6. FLOW LOGIC & INTERACTION (FIXED LOADING LOOP)
 -- =================================================================
 
--- Step 1: Loading Animation
-BarFill:TweenSize(UDim2.new(1, 0, 1, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, 2, true, function()
+-- Step 1: Loading Animation (Guaranteed 4 Seconds Max)
+task.spawn(function()
+    local duration = 4 -- 4 seconds total
+    local startTime = tick()
+
+    while (tick() - startTime) < duration do
+        local progress = (tick() - startTime) / duration
+        BarFill.Size = UDim2.new(math.clamp(progress, 0, 1), 0, 1, 0)
+        task.wait(0.03)
+    end
+
+    -- Finish loading and switch to Key Frame
+    BarFill.Size = UDim2.new(1, 0, 1, 0)
+    task.wait(0.2)
     LoadingFrame.Visible = false
     KeyFrame.Visible = true
 end)
 
 -- Step 2: Key System Button Logic
 GetKeyBtn.MouseButton1Click:Connect(function()
-    setclipboard("https://jaddevhere.github.io/rb-script/")
-    ShowNotification("Key Link Copied!", "Open browser & paste link to get your key.")
+    if setclipboard then
+        setclipboard("https://jaddevhere.github.io/rb-script/")
+        ShowNotification("Key Link Copied!", "Open browser & paste link to get your key.")
+    else
+        ShowNotification("Key Link", "https://jaddevhere.github.io/rb-script/")
+    end
 end)
 
 VerifyBtn.MouseButton1Click:Connect(function()
