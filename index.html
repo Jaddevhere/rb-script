@@ -1,137 +1,466 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RB Script - Key System</title>
-    <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f0f15; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: #181824; border: 1px solid #2a2a3d; border-radius: 12px; padding: 25px; width: 100%; max-width: 420px; text-align: center; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
-        h2 { color: #00aaff; margin-bottom: 5px; }
-        p { color: #aaa; font-size: 14px; margin-bottom: 20px; }
-        .task-box { background: #202030; border: 1px solid #33334d; border-radius: 8px; padding: 15px; margin-bottom: 12px; text-align: right; display: flex; justify-content: space-between; align-items: center; }
-        .btn { background: #00aaff; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; text-decoration: none; font-size: 13px; }
-        .btn:disabled { background: #444; cursor: not-allowed; }
-        .checkbox-container { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .status-box { background: #12121a; border-radius: 8px; padding: 10px; margin: 15px 0; font-size: 14px; color: #00ff88; }
-        .key-box { display: none; background: #00aaff15; border: 2px dashed #00aaff; padding: 15px; border-radius: 8px; margin-top: 15px; }
-        .key-text { font-family: monospace; font-size: 22px; font-weight: bold; letter-spacing: 2px; color: #00aaff; margin: 10px 0; }
-        .timer-text { font-size: 12px; color: #ffaa00; }
-    </style>
-</head>
-<body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TRL Key System | Executive Roblox Hub</title>
+  
+  <!-- Tailwind CSS & FontAwesome Icons -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-<div class="card">
-    <h2>RB Script Key System</h2>
-    <p>أكمل المهمتين للحصول على كود التفعيل الخاص بك</p>
-
-    <!-- المهمة الأولى -->
-    <div class="task-box">
-        <div>
-            <strong>1. شاهد القناة</strong>
-            <div id="yt-status" class="timer-text">اضغط شاهد لبدء العداد (10ث)</div>
-        </div>
-        <a id="yt-btn" href="https://youtube.com/@trl_team_rl?si=RgCZL2Q4J6UyvaR1" target="_blank" class="btn" onclick="startYoutubeTask()">شاهد</a>
-    </div>
-
-    <!-- المهمة الثانية -->
-    <div class="task-box">
-        <label class="checkbox-container">
-            <input type="checkbox" id="human-check" disabled onclick="checkTasks()">
-            <strong>2. أثبت أنك إنسان</strong>
-        </label>
-    </div>
-
-    <!-- صندوق حالة المهام -->
-    <div class="status-box" id="status-text">المهام المكتملة: 0 / 2</div>
-
-    <!-- زر استلام الكود -->
-    <button id="get-key-btn" class="btn" style="width: 100%; padding: 12px;" disabled onclick="generateKey()">استلام الكود</button>
-
-    <!-- صندوق الكود -->
-    <div class="key-box" id="key-box">
-        <div>الكود الخاص بك جاهز:</div>
-        <div class="key-text" id="generated-key">--------</div>
-        <div class="timer-text">⚠️ هذا الكود صالح لمدة 24 ساعة فقط ومستحيل تكراره!</div>
-        <button class="btn" style="margin-top: 10px; background: #222;" onclick="copyKey()">نسخ الكود</button>
-    </div>
-</div>
-
-<script>
-    let ytDone = false;
-    let humanDone = false;
-    const SECRET_SALT = "TRL_SECRET_KEY_2026";
-
-    function startYoutubeTask() {
-        let count = 10;
-        const status = document.getElementById("yt-status");
-        status.innerText = "انتظر 10 ثوانٍ...";
-        
-        const interval = setInterval(() => {
-            count--;
-            status.innerText = "انتظر " + count + " ثوانٍ...";
-            if (count <= 0) {
-                clearInterval(interval);
-                status.innerText = "✅ تمت المهمة بنجاح!";
-                status.style.color = "#00ff88";
-                ytDone = true;
-                document.getElementById("human-check").disabled = false;
-                updateStatus();
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0fdfa',
+              500: '#14b8a6',
+              600: '#0d9488',
+              cyan: '#00f3ff',
+              purple: '#8b5cf6',
+              dark: '#0a0d14'
             }
-        }, 1000);
-    }
-
-    function checkTasks() {
-        humanDone = document.getElementById("human-check").checked;
-        updateStatus();
-    }
-
-    function updateStatus() {
-        let completed = (ytDone ? 1 : 0) + (humanDone ? 1 : 0);
-        document.getElementById("status-text").innerText = "المهام المكتملة: " + completed + " / 2";
-        if (completed === 2) {
-            document.getElementById("get-key-btn").disabled = false;
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['Fira Code', 'monospace']
+          }
         }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #060911;
+      color: #f3f4f6;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(0, 243, 255, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .neon-glow {
+      box-shadow: 0 0 25px -5px rgba(0, 243, 255, 0.3);
+    }
+    .neon-border {
+      border-color: rgba(0, 243, 255, 0.4);
+    }
+    /* Typing Terminal Effect */
+    .typing-cursor::after {
+      content: '|';
+      animation: blink 0.8s infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+<body class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-brand-cyan selection:text-black">
+
+  <!-- ==================== INITIAL LOADING TERMINAL OVERLAY ==================== -->
+  <div id="loader-overlay" class="fixed inset-0 z-50 bg-[#04060a] flex flex-col items-center justify-center p-4 transition-opacity duration-700">
+    <div class="w-full max-w-md glass-card rounded-2xl p-6 border border-cyan-500/30 neon-glow">
+      <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-800">
+        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+          <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+        </div>
+        <span class="text-xs font-mono text-cyan-400 font-semibold tracking-wider">TRL-KERNEL v2.4.0</span>
+      </div>
+      
+      <div class="font-mono text-sm space-y-2 text-gray-300 min-h-[120px]" id="terminal-logs">
+        <p class="text-gray-500">> Booting security protocol...</p>
+      </div>
+
+      <div class="mt-6">
+        <div class="flex justify-between text-xs font-mono text-gray-400 mb-2">
+          <span>SYSTEM_INIT</span>
+          <span id="load-percentage">0%</span>
+        </div>
+        <div class="w-full bg-gray-900 h-2 rounded-full overflow-hidden border border-gray-800">
+          <div id="load-bar" class="bg-gradient-to-r from-cyan-500 to-purple-500 h-full w-0 transition-all duration-300"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 glass-card border-b border-gray-800/80">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      
+      <!-- Logo -->
+      <div class="flex items-center space-x-3 rtl:space-x-reverse">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center font-black text-xl text-black shadow-lg shadow-cyan-500/20">
+          T
+        </div>
+        <div>
+          <h1 class="font-bold text-lg tracking-wider text-white flex items-center gap-2">
+            TRL <span class="text-xs px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">DEV</span>
+          </h1>
+          <p class="text-xs text-gray-400 font-mono" data-i18n="subLogo">Roblox Execution Hub</p>
+        </div>
+      </div>
+
+      <!-- Actions (Status & Language Switcher) -->
+      <div class="flex items-center space-x-3 rtl:space-x-reverse">
+        
+        <!-- Script Status Badge -->
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-semibold">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+          <span data-i18n="statusOnline">Working 100%</span>
+        </div>
+
+        <!-- Language Selector Dropdown -->
+        <div class="relative">
+          <select id="langSelect" onchange="switchLanguage(this.value)" class="bg-gray-900/90 text-gray-200 text-xs rounded-xl border border-gray-700 px-3 py-2 pr-8 focus:outline-none focus:border-cyan-500 cursor-pointer font-semibold">
+            <option value="en">🇬🇧 English</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="pt">🇵🇹 Português</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="fr">🇫🇷 Français</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="max-w-4xl mx-auto px-4 py-10 flex-1 w-full space-y-10">
+
+    <!-- HERO SECTION -->
+    <div class="text-center space-y-4">
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold uppercase tracking-widest">
+        <i class="fa-solid fa-bolt text-cyan-400"></i> <span data-i18n="badgeText">TRL Key System v2.0</span>
+      </div>
+      <h2 class="text-4xl sm:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-200 to-purple-400 tracking-tight" data-i18n="heroTitle">
+        Next-Gen Roblox Script Protocol
+      </h2>
+      <p class="text-gray-400 max-w-xl mx-auto text-sm sm:text-base leading-relaxed" data-i18n="heroDesc">
+        Unleash maximum execution performance with advanced bypass security, zero execution lag, and fast key activation.
+      </p>
+    </div>
+
+    <!-- EXECUTOR LOADSTRING SECTION -->
+    <div class="glass-card rounded-2xl p-6 border border-cyan-500/20 relative overflow-hidden group">
+      <div class="absolute -right-10 -top-10 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+      
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <div>
+            <h3 class="font-bold text-white text-base" data-i18n="loadstringTitle">Execute Script Loadstring</h3>
+            <p class="text-xs text-gray-400" data-i18n="loadstringSub">Paste directly into your Roblox Executor (Delta, Codex, Arceus, Hydrogen)</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Box -->
+      <div class="relative bg-gray-950/90 rounded-xl border border-gray-800 p-4 font-mono text-xs sm:text-sm text-cyan-300 break-all select-all flex items-center justify-between gap-4">
+        <code id="loadstringCode">loadstring(game:HttpGet("https://raw.githubusercontent.com/Jaddevhere/rb-script/main/main.lua"))()</code>
+        <button onclick="copyLoadstring()" class="shrink-0 bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold px-4 py-2.5 rounded-lg transition-all flex items-center gap-2 active:scale-95 shadow-md shadow-cyan-500/20">
+          <i class="fa-solid fa-copy" id="copyIcon"></i>
+          <span id="copyBtnText" data-i18n="copyBtn">Copy</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- KEY GENERATOR BOX -->
+    <div class="glass-card rounded-2xl p-8 border border-purple-500/20 text-center space-y-6 relative overflow-hidden">
+      <div class="max-w-md mx-auto space-y-3">
+        <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-purple-500/20 to-cyan-500/20 border border-purple-500/40 flex items-center justify-center mx-auto text-purple-400 text-2xl shadow-xl">
+          <i class="fa-solid fa-key"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-white" data-i18n="keyBoxTitle">Get Activation Key</h3>
+        <p class="text-xs text-gray-400 leading-relaxed" data-i18n="keyBoxDesc">Click the button below to generate your unique 24-Hour session key instantly.</p>
+      </div>
+
+      <div id="keyDisplayArea" class="hidden max-w-md mx-auto bg-gray-950 p-4 rounded-xl border border-emerald-500/40 text-emerald-400 font-mono text-lg font-bold tracking-widest select-all animate-pulse">
+        TRL-KEY-PENDING
+      </div>
+
+      <button id="genKeyBtn" onclick="generateKeyProcess()" class="w-full max-w-md mx-auto bg-gradient-to-r from-cyan-500 via-teal-400 to-purple-600 hover:opacity-95 text-black font-extrabold py-4 px-8 rounded-xl transition-all shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-3 active:scale-95 text-base">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span data-i18n="genKeyBtnText">Generate Session Key</span>
+      </button>
+    </div>
+
+    <!-- FEATURES GRID -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-2">
+        <div class="text-cyan-400 text-xl"><i class="fa-solid fa-gauge-high"></i></div>
+        <h4 class="font-bold text-white text-sm" data-i18n="feat1Title">Instant Execution</h4>
+        <p class="text-xs text-gray-400" data-i18n="feat1Desc">Optimized Lua engine ensures 0ms execution delay on all platforms.</p>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-2">
+        <div class="text-purple-400 text-xl"><i class="fa-solid fa-shield-halved"></i></div>
+        <h4 class="font-bold text-white text-sm" data-i18n="feat2Title">Anti-Cheat Shield</h4>
+        <p class="text-xs text-gray-400" data-i18n="feat2Desc">Advanced memory protection preventing detection & bans.</p>
+      </div>
+
+      <div class="glass-card p-5 rounded-2xl border border-gray-800 space-y-2">
+        <div class="text-emerald-400 text-xl"><i class="fa-solid fa-rotate"></i></div>
+        <h4 class="font-bold text-white text-sm" data-i18n="feat3Title">Auto Synchronization</h4>
+        <p class="text-xs text-gray-400" data-i18n="feat3Desc">Auto-updates continuously with the newest Roblox game patches.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="glass-card border-t border-gray-800/80 py-6 mt-10">
+    <div class="max-w-6xl mx-auto px-4 text-center space-y-2">
+      <p class="text-xs text-gray-400 font-mono">
+        &copy; 2026 <span class="text-cyan-400 font-bold">TRL.dev</span> • All Rights Reserved.
+      </p>
+      <p class="text-[10px] text-gray-600 uppercase tracking-widest" data-i18n="footerSub">
+        Designed for Mobile & PC Executors
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==================== JAVASCRIPT LOGIC & I18N DICTIONARY ==================== -->
+  <script>
+    // 1. I18N DICTIONARY (English Default)
+    const translations = {
+      en: {
+        subLogo: "Roblox Execution Hub",
+        statusOnline: "Working 100%",
+        badgeText: "TRL Key System v2.0",
+        heroTitle: "Next-Gen Roblox Script Protocol",
+        heroDesc: "Unleash maximum execution performance with advanced bypass security, zero execution lag, and fast key activation.",
+        loadstringTitle: "Execute Script Loadstring",
+        loadstringSub: "Paste directly into your Roblox Executor (Delta, Codex, Arceus, Hydrogen)",
+        copyBtn: "Copy",
+        copiedBtn: "Copied!",
+        keyBoxTitle: "Get Activation Key",
+        keyBoxDesc: "Click the button below to generate your unique 24-Hour session key instantly.",
+        genKeyBtnText: "Generate Session Key",
+        feat1Title: "Instant Execution",
+        feat1Desc: "Optimized Lua engine ensures 0ms execution delay on all platforms.",
+        feat2Title: "Anti-Cheat Shield",
+        feat2Desc: "Advanced memory protection preventing detection & bans.",
+        feat3Title: "Auto Synchronization",
+        feat3Desc: "Auto-updates continuously with the newest Roblox game patches.",
+        footerSub: "Designed for Mobile & PC Executors"
+      },
+      ar: {
+        subLogo: "منصة تشغيل السكربتات",
+        statusOnline: "شغال 100%",
+        badgeText: "نظام مفاتيح TRL الإصدار 2.0",
+        heroTitle: "بروتوكول سكربتات روبلوكس الجيل القادم",
+        heroDesc: "استمتع بأعلى أداء تشغيل مع حماية فائقة وتخطي مضاد للغش وبدون أي بطء في التنفيذ.",
+        loadstringTitle: "كود التشغيل السريع (Loadstring)",
+        loadstringSub: "انسخه مباشرة وضعه في مشغل السكربتات (Delta, Codex, Arceus, Hydrogen)",
+        copyBtn: "نسخ",
+        copiedBtn: "تم النسخ!",
+        keyBoxTitle: "احصل على مفتاح التفعيل",
+        keyBoxDesc: "اضغط على الزر بالأسفل لتوليد مفتاح تفعيل خاص بك صالح لمدة 24 ساعة.",
+        genKeyBtnText: "توليد مفتاح التفعيل الآن",
+        feat1Title: "تشغيل فوري",
+        feat1Desc: "مهرك سرعة فائق بدون أي استهلاك للذاكرة على جميع الأجهزة.",
+        feat2Title: "درع حماية قوي",
+        feat2Desc: "أنظمة تشفير وتخطي أمان لمنع حظر الحسابات نهائياً.",
+        feat3Title: "تحديثات تلقائية",
+        feat3Desc: "يتوافق السكربت تلقائياً مع أحدث تحديثات لعبة روبلوكس.",
+        footerSub: "مصمم ليعمل بكفاءة على جميع المشغلات"
+      },
+      pt: {
+        subLogo: "Hub de Execução Roblox",
+        statusOnline: "Funcionando 100%",
+        badgeText: "Sistema de Chaves TRL v2.0",
+        heroTitle: "Protocolo de Scripts Roblox da Próxima Geração",
+        heroDesc: "Obtenha o máximo desempenho de execução com proteção avançada contra banimentos e ativação rápida.",
+        loadstringTitle: "Executar Loadstring do Script",
+        loadstringSub: "Cole diretamente no seu executor (Delta, Codex, Arceus, Hydrogen)",
+        copyBtn: "Copiar",
+        copiedBtn: "Copiado!",
+        keyBoxTitle: "Obter Chave de Ativação",
+        keyBoxDesc: "Clique no botão abaixo para gerar sua chave de sessão de 24 horas instantaneamente.",
+        genKeyBtnText: "Gerar Chave de Sessão",
+        feat1Title: "Execução Instantânea",
+        feat1Desc: "Motor Lua otimizado garantindo 0ms de atraso em todas as plataformas.",
+        feat2Title: "Escudo Anti-Cheat",
+        feat2Desc: "Proteção de memória avançada evitando detecção e banimentos.",
+        feat3Title: "Sincronização Automática",
+        feat3Desc: "Atualizações automáticas contínuas com os novos patches do Roblox.",
+        footerSub: "Projetado para Executores de Celular e PC"
+      },
+      es: {
+        subLogo: "Hub de Ejecución Roblox",
+        statusOnline: "Funcionando 100%",
+        badgeText: "Sistema de Claves TRL v2.0",
+        heroTitle: "Protocolo de Scripts Roblox de Próxima Generación",
+        heroDesc: "Desata el máximo rendimiento de ejecución con protección avanzada contra baneos y activación rápida.",
+        loadstringTitle: "Ejecutar Loadstring del Script",
+        loadstringSub: "Pégalo directamente en tu ejecutor (Delta, Codex, Arceus, Hydrogen)",
+        copyBtn: "Copiar",
+        copiedBtn: "¡Copiado!",
+        keyBoxTitle: "Obtener Clave de Activación",
+        keyBoxDesc: "Haz clic en el botón de abajo para generar tu clave de sesión de 24 horas al instante.",
+        genKeyBtnText: "Generar Clave de Sesión",
+        feat1Title: "Ejecución Instantánea",
+        feat1Desc: "Motor Lua optimizado que garantiza 0 ms de retraso en todas las plataformas.",
+        feat2Title: "Escudo Anti-Cheat",
+        feat2Desc: "Protección de memoria avanzada para evitar detecciones y baneos.",
+        feat3Title: "Sincronización Automática",
+        feat3Desc: "Actualizaciones automáticas continuas con los últimos parches de Roblox.",
+        footerSub: "Diseñado para Ejecutores de Móvil y PC"
+      },
+      ru: {
+        subLogo: "Центр Исполнения Скриптов",
+        statusOnline: "Работает 100%",
+        badgeText: "Система Ключей TRL v2.0",
+        heroTitle: "Скриптовый Протокол Roblox Нового Поколения",
+        heroDesc: "Максимальная производительность выполнения с продвинутой защитой от банов и быстрой активацией.",
+        loadstringTitle: "Выполнить Loadstring Скрипта",
+        loadstringSub: "Вставьте непосредственно в ваш инжектор (Delta, Codex, Arceus, Hydrogen)",
+        copyBtn: "Копировать",
+        copiedBtn: "Скопировано!",
+        keyBoxTitle: "Получить Ключ Активации",
+        keyBoxDesc: "Нажмите кнопку ниже, чтобы мгновенно сгенерировать ваш сессионный ключ на 24 часа.",
+        genKeyBtnText: "Сгенерировать Ключ",
+        feat1Title: "Мгновенный Запуск",
+        feat1Desc: "Оптимизированный движок Lua обеспечивает задержку 0 мс на всех устройствах.",
+        feat2Title: "Защита Anti-Cheat",
+        feat2Desc: "Продвинутая защита памяти, предотвращающая обнаружение и баны.",
+        feat3Title: "Авто-Синхронизация",
+        feat3Desc: "Автоматические обновления под самые свежие патчи Roblox.",
+        footerSub: "Создано для Мобильных и ПК Инжекторов"
+      },
+      fr: {
+        subLogo: "Centre d'Exécution Roblox",
+        statusOnline: "Opérationnel 100%",
+        badgeText: "Système de Clés TRL v2.0",
+        heroTitle: "Protocole de Script Roblox Nouvelle Génération",
+        heroDesc: "Profitez de performances d'exécution maximales avec une protection anti-ban avancée et une activation rapide.",
+        loadstringTitle: "Exécuter le Loadstring du Script",
+        loadstringSub: "Collez directement dans votre exécuteur (Delta, Codex, Arceus, Hydrogen)",
+        copyBtn: "Copier",
+        copiedBtn: "Copié !",
+        keyBoxTitle: "Obtenir une Clé d'Activation",
+        keyBoxDesc: "Cliquez sur le bouton ci-dessous pour générer instantanément votre clé de 24 heures.",
+        genKeyBtnText: "Générer la Clé",
+        feat1Title: "Exécution Instantanée",
+        feat1Desc: "Moteur Lua optimisé garantissant 0 ms de délai sur toutes les plateformes.",
+        feat2Title: "Bouclier Anti-Triche",
+        feat2Desc: "Protection mémoire avancée empêchant la détection et les bannissements.",
+        feat3Title: "Auto-Synchronisation",
+        feat3Desc: "Mises à jour automatiques continues avec les derniers patchs Roblox.",
+        footerSub: "Conçu pour les Exécuteurs Mobile et PC"
+      }
+    };
+
+    // 2. LANGUAGE SWITCHER LOGIC
+    function switchLanguage(lang) {
+      const dir = lang === 'ar' ? 'rtl' : 'ltr';
+      document.documentElement.setAttribute('dir', dir);
+      document.documentElement.setAttribute('lang', lang);
+
+      const t = translations[lang] || translations['en'];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key]) el.textContent = t[key];
+      });
     }
 
-    function generateKey() {
-        const btn = document.getElementById("get-key-btn");
-        btn.disabled = true;
-        btn.innerText = "انتظر 5 ثوانٍ جاري توليد الكود...";
+    // 3. COPY LOADSTRING FUNCTION
+    function copyLoadstring() {
+      const code = document.getElementById('loadstringCode').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const copyBtnText = document.getElementById('copyBtnText');
+        const copyIcon = document.getElementById('copyIcon');
+        const lang = document.getElementById('langSelect').value;
+        
+        copyBtnText.textContent = translations[lang]?.copiedBtn || 'Copied!';
+        copyIcon.className = "fa-solid fa-check text-black";
 
         setTimeout(() => {
-            btn.style.display = "none";
-            
-            const nowHours = Math.floor(Date.now() / (1000 * 60 * 60));
-            const randomSeed = Math.floor(Math.random() * 899999) + 100000;
-            const raw = nowHours + "_" + randomSeed + "_" + SECRET_SALT;
-            
-            let hash = 0;
-            for (let i = 0; i < raw.length; i++) {
-                hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-                hash |= 0;
-            }
-            
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            let key = "";
-            let num = Math.abs(hash) + nowHours;
-            
-            for (let i = 0; i < 9; i++) {
-                key += chars[(num + i * randomSeed) % chars.length];
-            }
-
-            document.getElementById("generated-key").innerText = key;
-            document.getElementById("key-box").style.display = "block";
-        }, 5000);
+          copyBtnText.textContent = translations[lang]?.copyBtn || 'Copy';
+          copyIcon.className = "fa-solid fa-copy";
+        }, 2000);
+      });
     }
 
-    function copyKey() {
-        const keyText = document.getElementById("generated-key").innerText;
-        navigator.clipboard.writeText(keyText);
-        alert("تم نسخ الكود بنجاح!");
-    }
-</script>
+    // 4. GENERATE KEY SIMULATION PROCESS
+    function generateKeyProcess() {
+      const display = document.getElementById('keyDisplayArea');
+      const btn = document.getElementById('genKeyBtn');
+      
+      btn.disabled = true;
+      btn.classList.add('opacity-50', 'cursor-not-allowed');
+      display.classList.remove('hidden');
+      display.textContent = "GENERATING ENCRYPTED KEY...";
 
+      setTimeout(() => {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let p1 = '', p2 = '';
+        for(let i=0; i<4; i++) p1 += chars.charAt(Math.floor(Math.random() * chars.length));
+        for(let i=0; i<4; i++) p2 += chars.charAt(Math.floor(Math.random() * chars.length));
+        
+        const generatedKey = `TRL-2026-${p1}-${p2}`;
+        display.textContent = generatedKey;
+        display.classList.remove('animate-pulse');
+        display.classList.add('border-cyan-400', 'text-cyan-300');
+
+        btn.disabled = false;
+        btn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }, 1500);
+    }
+
+    // 5. TERMINAL LOADING OVERLAY SIMULATION
+    window.addEventListener('DOMContentLoaded', () => {
+      const logsContainer = document.getElementById('terminal-logs');
+      const loadBar = document.getElementById('load-bar');
+      const loadPerc = document.getElementById('load-percentage');
+      const overlay = document.getElementById('loader-overlay');
+
+      const logs = [
+        "> [OK] Verifying SSL Handshake...",
+        "> [OK] Loading TRL Core Modules...",
+        "> [OK] Connecting to Global Lua Repositories...",
+        "> [OK] Initializing Key Verification Engine...",
+        "> [READY] Launching Dashboard Interface..."
+      ];
+
+      let step = 0;
+      const interval = setInterval(() => {
+        if (step < logs.length) {
+          const p = document.createElement('p');
+          p.className = "text-cyan-400 font-mono text-xs";
+          p.textContent = logs[step];
+          logsContainer.appendChild(p);
+          
+          const progress = Math.min(((step + 1) / logs.length) * 100, 100);
+          loadBar.style.width = `${progress}%`;
+          loadPerc.textContent = `${Math.round(progress)}%`;
+
+          step++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => overlay.remove(), 700);
+          }, 400);
+        }
+      }, 350);
+    });
+  </script>
 </body>
 </html>
